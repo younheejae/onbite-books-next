@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import style from "./page.module.css";
+import { createReviewAction } from "@/actions/create-review.action";
 
 // export const dynamicParams = false;
 
@@ -9,13 +10,8 @@ export function generateStaticParams () {
   return [{ id: "1" }, { id: "2" }, { id: "3" },];
 }
 
-export default async function Page({
-  params,
-}: {
-  params: Promise<{ id: string | string[] }>;
-}) {
-  const { id } = await params;
-  const response = await fetch(`${process.env.NEXT_PUBLIC_API_SERVER_URL}/book/${id}`);
+async function BookDetail({bookId}: {bookId: string}) {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_SERVER_URL}/book/${bookId}`);
   if(!response.ok) {
     if(response.status === 404) {
       notFound();
@@ -26,7 +22,7 @@ export default async function Page({
   const { title, subTitle, description, author, publisher, coverImgUrl } = book;
 
   return (
-    <div className={style.container}>
+    <section>
       <div
         className={style.cover_img_container}
         style={{ backgroundImage: `url('${coverImgUrl}')` }}
@@ -39,6 +35,34 @@ export default async function Page({
         {author} | {publisher}
       </div>
       <div className={style.description}>{description}</div>
-    </div>
+    </section>
   );
+}
+
+function ReviewEditor({ bookId }: {bookId: string}) {
+  return (
+    <section>
+      <form action={createReviewAction}>
+        {/* hidden: 안보이는 input 태그 생성, readOnly를 함께 붙여준다 */}
+        <input name="bookId" value={bookId} hidden readOnly />
+        <input required name="content" placeholder="리뷰 내용" />
+        <input required name="author" placeholder="작성자" />
+        <button type="submit">작성하기</button>
+      </form>
+    </section>
+  )
+}
+
+export default async function Page({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
+  return (
+    <div className={style.container}>
+      <BookDetail bookId={id} />
+      <ReviewEditor bookId={id} />
+    </div>
+  )
 }
