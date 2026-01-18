@@ -17,8 +17,8 @@ export default function ReviewItemDeleteButton({
   );
 
   useEffect(() => {
-    if(state && !state.status) {
-        alert(state.error);
+    if (state && !state.status) {
+      alert(state.error);
     }
   }, [state]);
 
@@ -26,8 +26,8 @@ export default function ReviewItemDeleteButton({
     // div가 클릭되었을 때 form태그가 강제로 제출되도록
     <form ref={formRef} action={formAction}>
       {/* 서버 액션으로 전달해주기 위해 input hidden 사용 */}
-      <input name="reviewId" value={reviewId} hidden />
-      <input name="bookId" value={bookId} hidden />
+      <input name="reviewId" value={reviewId} hidden readOnly />
+      <input name="bookId" value={bookId} hidden readOnly />
       {isPending ? (
         <div>...</div>
       ) : (
