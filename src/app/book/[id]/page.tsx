@@ -5,12 +5,21 @@ import ReviewItem from "@/components/review-item";
 import ReviewEditor from "@/components/review-editor";
 import Image from "next/image";
 
-// export const dynamicParams = false;
-
 // 정적인 파라미터를 생성하는 함수
-export function generateStaticParams() {
+export async function generateStaticParams() {
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_SERVER_URL}/book`
+  );
+
+  if (!response.ok) {
+    throw new Error(response.statusText);
+  }
+
+  const books: BookData[] = await response.json();
   // 빌드 타임에 정적 파라미터들을 읽어서 빌드 타임에 정적으로 만든다
-  return [{ id: "1" }, { id: "2" }, { id: "3" }];
+  return books.map((book) => ({
+    id: book.id.toString(),
+  }));
 }
 
 async function BookDetail({ bookId }: { bookId: string }) {

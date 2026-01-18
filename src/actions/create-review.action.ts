@@ -1,6 +1,6 @@
 "use server";
 
-import { revalidatePath, revalidateTag } from "next/cache";
+import { revalidateTag } from "next/cache";
 
 // useActionState를 사용하면 첫번째 인수로는 state를 전달하므로 첫번째 매개변수로 받아오도록 해야한다
 export async function createReviewAction (
