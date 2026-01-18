@@ -7,6 +7,13 @@ const nextConfig: NextConfig = {
     fetches: {
       fullUrl: true
     }
+  },
+  // 이미지를 가져오려는 도메인을 적어준다 
+  // Next가 해당 도메인으로부터 가져오는 이미지는 안전하다고 평가함 
+  images: {
+    domains: [
+      "shopping-phinf.pstatic.net"
+    ]
   }
 };
 
